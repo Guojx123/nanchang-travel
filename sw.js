@@ -7,7 +7,7 @@
  * 维护约定：任何 css/js 改动都要同时升这里的 CACHE 和 js/app.js 的 CACHE_NAME，
  * 否则 activate 会把旧缓存删掉、或老访客一直跑旧脚本。
  */
-var CACHE = "nanchang-trip-v19";
+var CACHE = "nanchang-trip-v20";
 var SHELL = [
   "./",
   "index.html",

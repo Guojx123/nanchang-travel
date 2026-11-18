@@ -857,3 +857,14 @@ h1, h2, h3 { font-family: var(--font-title); }
 
 /* 口碑一般的店用灰标签：红色标签会误导成推荐 */
 .food-tag.muted { background: #7A8698; }
+
+/* ===== 行程里的景点链接（与菜名的红标签区分开，用靛蓝） ===== */
+.spot-link {
+  display: inline-block;
+  color: var(--indigo); font-weight: 500;
+  background: rgba(22,50,79,.07);
+  border-radius: 5px; padding: 1px 5px;
+  text-decoration: none;
+  transition: background-color .15s ease;
+}
+.spot-link:active { background: rgba(22,50,79,.18); }
