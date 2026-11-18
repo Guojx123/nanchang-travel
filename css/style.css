@@ -1109,6 +1109,13 @@ body { letter-spacing: 0; }                          /* 正文 16px 中文不加
 /* D-4 flex 版 Bento：首卡（滕王阁）放大，只动 flex-basis，.hscroll 三件套一字不动 */
 .dest-card:first-child { flex-basis: 78%; }
 
+/* D-4 补丁：首卡 78% 宽 + img aspect-ratio 4/3 会让图随宽度变高（首卡 209px vs 其余 166px），
+   标题/描述整体错位约 43px。改为统一固定图高——宽度仍按 Bento 变化，图按 object-fit:cover 裁切，
+   五张卡的文字行全部对齐（h3 顶一律 = 图高）。 */
+.dest-card img { aspect-ratio: auto; height: 200px; }
+@media (min-width: 640px) { .dest-card img { height: 230px; } }
+@media (min-width: 1024px) { .dest-card img { height: 260px; } }
+
 /* D-1 目的地横滑三件套允许只改 padding-bottom：给阴影留落地空间 */
 .hscroll { padding-bottom: 14px; }
 
