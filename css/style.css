@@ -1369,3 +1369,31 @@ body { letter-spacing: 0; }                          /* 正文 16px 中文不加
   /* D-4 首卡 ≥1024 45% */
   .dest-card:first-child { flex-basis: 45%; }
 }
+
+/* ============================================================
+   行程日卡收起/展开（trip 页 · team-lead 需求）
+   .day-body 由 js/app.js 运行时包裹生成（.day-head 后的所有兄弟节点）；
+   默认展开，不做 max-height 动画（时间轴高度不稳，display 直接切）。
+   收起时 .day-head i（日期/住宿行）留在头部可见，用户扫一眼仍知道这天去哪。
+   ============================================================ */
+.day-body { min-width: 0; }
+.day-card.collapsed .day-body { display: none; }
+
+.day-head {
+  cursor: pointer;
+  -webkit-user-select: none; user-select: none;
+  min-height: 44px;                  /* 可点区域 ≥44px：现有 h3+i 两行已超，此处仅保底 */
+  border-radius: var(--r-sm);
+}
+.day-head:active { background: var(--surface-2); }   /* 按下反馈（tap-highlight 已全局移除） */
+
+/* 折叠指示：#i-chevron 是右向箭头——展开旋 90°（向下），收起回 0°（向右） */
+.day-fold {
+  flex: none; margin-left: auto;
+  display: grid; place-items: center;
+  width: 28px; height: 28px;
+  color: var(--ink-3);
+  align-self: center;
+}
+.day-fold .ic { transform: rotate(90deg); transition: transform var(--dur) var(--ease-out); }
+.day-card.collapsed .day-fold .ic { transform: rotate(0deg); }

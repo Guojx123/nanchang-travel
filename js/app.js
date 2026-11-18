@@ -663,7 +663,7 @@
 
   /* ---------- PWA：注册 Service Worker + 离线下载 ---------- */
   var OFF_KEY = "nanchang-offline-ok";
-  var CACHE_NAME = "nanchang-trip-v24";   // 必须与 sw.js 的 CACHE 一致，否则离线缓存会被 SW 激活时清理掉
+  var CACHE_NAME = "nanchang-trip-v25";   // 必须与 sw.js 的 CACHE 一致，否则离线缓存会被 SW 激活时清理掉
   var PAGES = ["index.html", "explore.html", "trip.html", "pack.html", "me.html", "food.html"];
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("sw.js").then(function () {
@@ -773,4 +773,48 @@
   window.addEventListener("online", function () {
     toast("网络已恢复");
   });
+
+  /* ---------- 行程日卡收起/展开（trip 页） ----------
+   * 结构增强优先，不改 trip.html：JS 把 .day-head 之后的兄弟节点（.train-line / .stop-list）
+   * 包进新建的 .day-body，头部追加 #i-chevron 折叠指示并补 role/tabindex/aria-*。
+   * 每次进页一律默认展开，不做 localStorage 记忆（需求原话：默认是打开状态）。
+   * 收起/展开靠 .day-card.collapsed 切 .day-body 的 display:none —— 不做 max-height
+   * 动画：时间轴内容高度大且不稳定，动画易抖；且全局 prefers-reduced-motion 规则
+   * 本来就会杀掉所有过渡。 */
+  (function () {
+    $$(".day-card").forEach(function (card, idx) {
+      var head = $(".day-head", card);
+      if (!head || head.dataset.foldReady) return;    // 存在性守卫 + 防重复注入
+      head.dataset.foldReady = "1";
+
+      var body = document.createElement("div");
+      body.className = "day-body";
+      body.id = "dayBody-" + (idx + 1);
+      while (head.nextSibling) body.appendChild(head.nextSibling);
+      card.appendChild(body);
+
+      var fold = document.createElement("span");
+      fold.className = "day-fold";
+      fold.setAttribute("aria-hidden", "true");
+      fold.innerHTML = '<svg class="ic"><use href="#i-chevron"/></svg>';
+      head.appendChild(fold);
+
+      head.setAttribute("role", "button");
+      head.setAttribute("tabindex", "0");
+      head.setAttribute("aria-expanded", "true");
+      head.setAttribute("aria-controls", body.id);
+
+      function toggle() {
+        var collapsed = card.classList.toggle("collapsed");
+        head.setAttribute("aria-expanded", collapsed ? "false" : "true");
+      }
+      head.addEventListener("click", toggle);
+      head.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();              // Space 默认滚动页面，拦掉
+          toggle();
+        }
+      });
+    });
+  })();
 })();
