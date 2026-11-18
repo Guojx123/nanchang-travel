@@ -1,0 +1,9 @@
+.DS_Store
+*.pyc
+__pycache__/
+
+# 字体子集化工具的源字体缓存（24MB，可重新下载）
+tools/.cache/
+
+# 配图生成原图（PNG，只保留压缩后的 WebP）
+assets/img/raw/

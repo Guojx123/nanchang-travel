@@ -1,0 +1,16 @@
+{
+  "name": "赣鄱四日 · 龙南 南昌 景德镇",
+  "short_name": "赣鄱四日",
+  "description": "龙南围屋 · 南昌滕王阁 · 景德镇瓷都——2026.11.21–11.24 四日行程与攻略",
+  "lang": "zh-CN",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FAF7F0",
+  "theme_color": "#16324F",
+  "icons": [
+    { "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

@@ -1,0 +1,307 @@
+#!/usr/bin/env python3
+"""把公共壳（顶栏 + 底部 Tab + 首帧底色）写进 6 个 HTML 的静态标记里。
+
+为什么需要它
+------------
+原先壳由 js/layout.js 注入，而 layout.js 是 <script defer>：浏览器解析到 body
+内容就开始渐进渲染，而 defer 脚本要等整份 HTML 解析完才执行。慢网下这段间隔里
+页面是"有内容、没顶栏、没底部 Tab"的，随后壳才补上、整页往下跳一下 —— 就是点击
+Tab 时看到的闪。把壳写进 HTML 后，首帧就带着它，不存在补的过程。
+
+用法
+----
+    python3 tools/build-shell.py            # 写入 / 更新（幂等）
+    python3 tools/build-shell.py --check     # 只检查是否已同步，不写文件
+
+改壳（导航项、热词、顶栏文案）请改本脚本的模板后重跑，不要手改 HTML，
+否则 6 个页面迟早漂移成 6 个样子。
+"""
+from __future__ import annotations
+
+import argparse
+import glob
+import os
+import re
+import sys
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# ---------- 数据源：与 js/layout.js 的 NAV / CHIPS 保持一致 ----------
+NAV = [
+    ("home", "首页", "index.html",
+     '<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/>'),
+    ("explore", "打卡", "explore.html",
+     '<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/>'),
+    ("trip", "行程", "trip.html",
+     '<path d="M8 3v3M16 3v3"/><rect x="4" y="6" width="16" height="15" rx="2"/><path d="M4 11h16"/>'),
+    ("pack", "打包", "pack.html",
+     '<rect x="5" y="8" width="14" height="12" rx="2"/><path d="M9 8V6a3 3 0 0 1 6 0v2M9 12v4M15 12v4"/>'),
+    ("me", "我的", "me.html",
+     '<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 5-5.5 8-5.5s6.5 1.5 8 5.5"/>'),
+]
+
+# 没有自己 Tab 的页面，归到语义上最近的 Tab 下高亮。
+# food.html 只能从首页美食区块进入，若不高亮任何一项，用户进去后完全没有位置感。
+# 注意别把 food 直接加进 NAV：那会给 6 个页面都多出一个 Tab 项。
+TAB_ALIAS = {"food": "explore"}
+
+CHIPS = [
+    ("滕王阁", "滕王阁", "index.html?kw=滕王阁"),
+    ("万寿宫", "万寿宫", "index.html?kw=万寿宫"),
+    ("拌粉", "拌粉瓦罐汤", "explore.html?kw=拌粉"),
+    ("景德镇", "景德镇", "explore.html?kw=景德镇"),
+]
+
+# 有搜索框的页面。美食页 22 家店也需要能搜，所以一并给上。
+SEARCH_PAGES = ("home", "explore", "food")
+# 热词只给前两页：它们是跨页跳转用的，堆在美食页里会跟「分类」抢位置
+CHIP_PAGES = ("home", "explore")
+# 顶栏高度因此不同，是既有设计
+PLACEHOLDER = {
+    "home":    "搜索：滕王阁 / 万寿宫 / 拌粉 / 景德镇",
+    "explore": "搜索：滕王阁 / 万寿宫 / 拌粉 / 景德镇",
+    "food":    "搜索：拌粉 / 瓦罐汤 / 冷粉 / 客家菜",
+}
+
+ICON = ('<svg viewBox="0 0 24 24" width="16" height="16" fill="none" '
+        'stroke="currentColor" stroke-width="2">')
+
+# ---------- 手绘 SVG 图标 ----------
+# 全站不再用系统 emoji / 字符图标（✕ ↑ ♡ ❤ 📍 › ✓ …）：emoji 在不同系统上字形不一致，
+# 字符图标又会随字体 fallback 变形。这里统一 24×24 线性图标，描边用 currentColor，
+# 由 CSS 的 .ic 控制线宽与尺寸；需要实心点缀（眼睛、圆点）的局部显式写 fill="currentColor"。
+# 新增图标只需往下面这个表里加一条，重跑脚本即可全站可用。
+ICONS = [
+    # —— 界面通用 ——
+    ("i-locate", '<path d="M12 21s-6.5-5.4-6.5-10.2A6.5 6.5 0 0 1 18.5 10.8C18.5 15.6 12 21 12 21z"/><circle cx="12" cy="10.6" r="2.4"/>'),
+    ("i-heart", '<path d="M20.8 4.8a5.4 5.4 0 0 0-7.6 0L12 6.1l-1.2-1.3a5.4 5.4 0 0 0-7.6 7.6l1.2 1.3L12 21l7.6-7.3 1.2-1.3a5.4 5.4 0 0 0 0-7.6z"/>'),
+    ("i-close", '<path d="M6.4 6.4 17.6 17.6M17.6 6.4 6.4 17.6"/>'),
+    ("i-search", '<circle cx="10.8" cy="10.8" r="6.4"/><path d="m20 20-4.6-4.6"/>'),
+    ("i-chevron", '<path d="m9.5 5 6.5 7-6.5 7"/>'),
+    ("i-up", '<path d="M12 19.6V6.6"/><path d="m6.6 12.2 5.4-5.4 5.4 5.4"/>'),
+    ("i-check", '<path d="m5 12.6 4.6 4.6L19 6.6"/>'),
+    ("i-bulb", '<path d="M9.6 18.4h4.8"/><path d="M10.6 20.8h2.8"/><path d="M12 3.4a5.8 5.8 0 0 1 3.5 10.5c-.7.5-1.1 1.3-1.1 2.1H9.6c0-.8-.4-1.6-1.1-2.1A5.8 5.8 0 0 1 12 3.4z"/>'),
+    ("i-download", '<path d="M12 3.8v10.2"/><path d="m8.2 10.4 3.8 3.8 3.8-3.8"/><path d="M4.6 18v1.6a2 2 0 0 0 2 2h10.8a2 2 0 0 0 2-2V18"/>'),
+    ("i-install", '<rect x="7" y="3.2" width="10" height="17.6" rx="2.2"/><path d="M10.6 6.4h2.8"/><path d="M12 9.6v5.4"/><path d="m10.1 12.4 1.9 2 1.9-2"/>'),
+    ("i-bag", '<rect x="4.2" y="8" width="15.6" height="12" rx="2.2"/><path d="M9 8V6.2a3 3 0 0 1 6 0V8"/><path d="M9 12.4v3.6M15 12.4v3.6"/>'),
+    ("i-map", '<path d="M9 4 3.5 6.5v13L9 17l6 2.5L21 17V4l-6 2.5z"/><path d="M9 4v13M15 6.5v13"/>'),
+    ("i-trash", '<path d="M4.6 7h14.8"/><path d="M9.6 7V5.4A1.4 1.4 0 0 1 11 4h2a1.4 1.4 0 0 1 1.4 1.4V7"/><path d="M6.7 7l.8 12.1a2 2 0 0 0 2 1.9h5a2 2 0 0 0 2-1.9L17.3 7"/><path d="M10.4 11v6M13.6 11v6"/>'),
+    ("i-chat", '<path d="M4 6.6A2.6 2.6 0 0 1 6.6 4h10.8A2.6 2.6 0 0 1 20 6.6V14a2.6 2.6 0 0 1-2.6 2.6H9.4L4 20.4z"/>'
+               '<circle cx="9" cy="10.4" r=".9" fill="currentColor" stroke="none"/><circle cx="12" cy="10.4" r=".9" fill="currentColor" stroke="none"/><circle cx="15" cy="10.4" r=".9" fill="currentColor" stroke="none"/>'),
+    ("i-calendar", '<rect x="4" y="5.4" width="16" height="14.2" rx="2.2"/><path d="M4 10h16M8.6 3.4v3.4M15.4 3.4v3.4"/>'),
+    ("i-users", '<circle cx="9.4" cy="8.4" r="3.2"/><path d="M3.6 19.6c.8-3.4 3.2-5.2 5.8-5.2s5 1.8 5.8 5.2"/><path d="M16.2 5.6a3.2 3.2 0 0 1 0 6"/><path d="M17.4 14.8c2.2.6 3.6 2.4 4.2 4.8"/>'),
+    ("i-note", '<path d="M6 3.6h8.4L19 8.2v12.2H6z"/><path d="M14 3.6v4.8h4.8"/><path d="M9 12.8h6M9 16.2h4"/>'),
+    ("i-plane", '<path d="M21.4 3.2 2.8 10.4l6.6 2.4 2.4 6.6z"/><path d="M21.4 3.2 9.4 12.8"/>'),
+    # —— 首页天气 / 节庆 ——
+    ("i-sun", '<circle cx="8" cy="7.6" r="2.9"/><path d="M8 2.8v1.5M3.1 7.6h1.5M11.4 7.6h1.5M4.5 4.1 3.6 3.2M11.5 4.1l.9-.9"/>'
+              '<path d="M17.6 18.6H9.4a3.3 3.3 0 0 1 .2-6.6 4.6 4.6 0 0 1 8.6.8 3.4 3.4 0 0 1-.6 5.8z"/>'),
+    ("i-moon", '<circle cx="11.4" cy="12.8" r="7"/><circle cx="9" cy="10.6" r="1.3"/><circle cx="13.6" cy="14.4" r="1"/><circle cx="11" cy="16.2" r=".7"/>'
+               '<path d="M19.4 3.4l.5 1.4 1.4.5-1.4.5-.5 1.4-.5-1.4-1.4-.5 1.4-.5z" fill="currentColor" stroke="none"/>'),
+    ("i-music", '<circle cx="7.6" cy="17.4" r="2.6"/><circle cx="16.4" cy="15.2" r="2.6"/><path d="M10.2 17.4V6.6l8.8-1.8v10.4"/>'),
+    # —— 美食 ——
+    ("i-bowl", '<path d="M3.8 11.6h16.4a8.2 8.2 0 0 1-16.4 0z"/><path d="M2.6 11.6h18.8"/><path d="M9.4 8.6c1.2-1.4 1.2-2.6 0-4M14.6 8.6c1.2-1.4 1.2-2.6 0-4"/>'),
+    ("i-noodle", '<path d="M4.4 12.2h15.2a7.6 7.6 0 0 1-15.2 0z"/><path d="M3.2 12.2h17.6"/><path d="M14.6 3.2 20.8 9.4M17.4 2.6 21.6 6.8"/><path d="M8.8 9.4c2.4-1.6 4.4 1.6 6.8 0"/>'),
+    ("i-rice", '<path d="M4 12.6h16a8 8 0 0 1-16 0z"/><path d="M2.8 12.6h18.4"/><path d="M6.8 12.6a5.2 5.2 0 0 1 10.4 0"/>'
+               '<circle cx="10.2" cy="9.6" r=".7" fill="currentColor" stroke="none"/><circle cx="13.6" cy="10" r=".7" fill="currentColor" stroke="none"/>'),
+    ("i-fish", '<path d="M15 12c-2.4-3.8-5-5.4-7.6-5.4C4.6 6.6 3 9.2 3 12s1.6 5.4 4.4 5.4c2.6 0 5.2-1.6 7.6-5.4z"/><path d="M15 7.4 20.4 12 15 16.6z"/>'
+               '<circle cx="6.6" cy="10.8" r=".8" fill="currentColor" stroke="none"/>'),
+    ("i-meat", '<path d="M5.2 8.2c3.6-3 8.6-3.4 12.2-.8 3 2.2 3.4 6 .8 8.8-2.6 2.8-7.4 3.6-11 1.6-3.6-2-4.6-6.8-2-9.6z"/><path d="M8 10.8c2.8-1.4 5.8-.8 7.6 1.6"/>'),
+    ("i-chili", '<path d="M8 19.4c-3-3.8-2.2-9 1.8-11.2 2.6-1.4 5.2-.4 5.8 1.6-3.6 1-5.6 4.2-4.6 7.6.4 1.4-.6 2.6-3 2z"/><path d="M13.4 6.4c1.2-1.6 2.8-1.8 4.2-1-.4 1.4-1.4 2.4-2.8 2.6"/>'),
+    ("i-fire", '<path d="M12 20.8c3.3 0 5.8-2.3 5.8-5.4 0-5.6-5.8-6.6-5.8-11.4 0 0-6.2 3.2-6.2 9.6 0 4 3 7.2 6.2 7.2z"/>'
+               '<path d="M12 20.8c1.7 0 3-1.2 3-2.9 0-2.4-2.4-3.4-2.4-5.9 0 0-3 1.7-3 4.7 0 2.3 1.1 4.1 2.4 4.1z"/>'),
+    ("i-drumstick", '<path d="M18.4 5.2c1 2.6-.4 5.4-3 7-2.4 1.4-5.2 1.6-7.4.6l2.2-2.2c1.8-1.8 2.4-4.4 1.4-6.4z"/><path d="M8.2 12.6 5.2 15.6"/><circle cx="4.4" cy="17" r="1.8"/><circle cx="7" cy="14.4" r="1.8"/>'),
+    ("i-dumpling", '<path d="M3.8 15.6c0-4 3.7-7.2 8.2-7.2s8.2 3.2 8.2 7.2z"/><path d="M3.8 15.6h16.4"/><path d="M7.2 10.8c-.6 1.4-1 3-1 4.8M12 8.8v6.8M16.8 10.8c.6 1.4 1 3 1 4.8"/>'),
+    ("i-tofu", '<rect x="4.4" y="6.8" width="15.2" height="11" rx="2"/><path d="M4.4 11.4h15.2M9.8 6.8v11"/>'),
+    ("i-veg", '<path d="M6.6 17.8C4 15 4.6 9.6 9.4 6.8c4.8-2.8 10-1.2 11.4 3 1.4 4.4-2.2 9-7 9.8-2.8.4-5.6.2-7.2-1.8z"/><path d="M9.6 17.4C11.6 12.8 14.2 9.4 17.8 7.4"/>'),
+    ("i-skewer", '<path d="M9.2 21V4.2"/><circle cx="9.2" cy="7.6" r="2.5"/><circle cx="9.2" cy="12.6" r="2.5"/><circle cx="9.2" cy="17.6" r="2.5"/>'),
+    ("i-drink", '<path d="M6.6 6.6h10.8l-1.4 13a2 2 0 0 1-2 1.8h-4a2 2 0 0 1-2-1.8z"/><path d="M5.4 6.6h13.2"/><path d="M14.6 2.8 12.4 7"/><path d="M9.6 11.4h4.4v3.4H9.6z"/>'),
+    ("i-pig", '<circle cx="12" cy="12.6" r="6.8"/><path d="M6.6 8 5.2 4.4l3.8 1.6M17.4 8l1.4-3.6-3.8 1.6"/><ellipse cx="12" cy="14.2" rx="3.2" ry="2.2"/>'
+              '<circle cx="10.8" cy="14.2" r=".6" fill="currentColor" stroke="none"/><circle cx="13.2" cy="14.2" r=".6" fill="currentColor" stroke="none"/>'
+              '<circle cx="9.4" cy="10.8" r=".7" fill="currentColor" stroke="none"/><circle cx="14.6" cy="10.8" r=".7" fill="currentColor" stroke="none"/>'),
+    ("i-hotel", '<path d="M3.4 20.4V7.6"/><path d="M3.4 14.4h17.2v6"/><path d="M8 11.6a2.4 2.4 0 0 1 2.4-2.4h5.6a2.4 2.4 0 0 1 2.4 2.4v2.8"/>'),
+    # —— 苗侗文化 ——
+    ("i-craft", '<path d="M12 3.6 20.4 12 12 20.4 3.6 12z"/><path d="M12 8.2 15.8 12 12 15.8 8.2 12z"/>'),
+    ("i-silver", '<path d="M4.6 5.6c0 6.4 3.3 10.6 7.4 12.8 4.1-2.2 7.4-6.4 7.4-12.8"/><path d="M4.6 5.6h14.8"/><circle cx="12" cy="19.4" r="1.5"/>'),
+    ("i-wine", '<path d="M7 6.8h10l-1.2 11.2a2.4 2.4 0 0 1-2.4 2.2h-2.8a2.4 2.4 0 0 1-2.4-2.2z"/><path d="M7 6.8c0-2 2.2-3.4 5-3.4s5 1.4 5 3.4"/><path d="M8.2 11.6h7.6"/>'),
+    ("i-stage", '<path d="M3.6 20.4V6.4M20.4 20.4V6.4"/><path d="M3.6 6.4h16.8"/><path d="M6 6.4c0 5.4 2 9.2 6 9.6 4-.4 6-4.2 6-9.6"/>'),
+    ("i-house", '<path d="M3.6 10.6 12 4.2l8.4 6.4"/><path d="M6.2 9.4v5.2h11.6V9.4"/><path d="M8.6 14.6v5.8M15.4 14.6v5.8"/><path d="M6.4 20.4h11.2"/>'),
+    ("i-compass", '<circle cx="12" cy="12" r="8.4"/><path d="m15.2 8.8-2.2 5.6-5.6 2.2 2.2-5.6z"/>'),
+    # —— 打包清单分类 ——
+    ("i-card", '<rect x="3.4" y="5.4" width="17.2" height="13.2" rx="2.2"/><circle cx="8.8" cy="11" r="1.9"/><path d="M14.2 10.2h3.6M14.2 13.4h2.4"/><path d="M6.2 15.6c1.2-1 2.6-1.4 4-1.2"/>'),
+    ("i-plug", '<path d="M9 3.6v5M15 3.6v5"/><path d="M7 8.6h10v2.8a5 5 0 0 1-10 0z"/><path d="M12 16.4v4"/>'),
+    ("i-coat", '<path d="M9.2 3.8 5 6 3.6 10.8 6.2 12.4v8h11.6v-8l2.6-1.6-1.4-4.8-4.2-2.2"/><path d="M9.2 3.8c0 1.6 1.3 2.8 2.8 2.8s2.8-1.2 2.8-2.8"/>'),
+    ("i-bottle", '<rect x="8.4" y="8.8" width="7.2" height="11.6" rx="2"/><path d="M10.4 8.8V5.6h3.2v3.2"/><rect x="9.6" y="2.6" width="4.8" height="3" rx="1"/>'),
+    ("i-pill", '<g transform="rotate(-45 12 12)"><rect x="3.4" y="8.8" width="17.2" height="6.4" rx="3.2"/><path d="M12 8.8v6.4"/></g>'),
+    ("i-backpack", '<path d="M5.6 9.4a6.4 6.4 0 0 1 12.8 0v9.2a2.4 2.4 0 0 1-2.4 2.4H8a2.4 2.4 0 0 1-2.4-2.4z"/><path d="M9 9.4V6.8a3 3 0 0 1 6 0v2.6"/><path d="M9.6 13.2h4.8v3.6H9.6z"/>'),
+    ("i-ban", '<circle cx="12" cy="12" r="8.4"/><path d="M6.4 17.6 17.6 6.4"/>'),
+    ("i-bell", '<path d="M6.4 17.4c1-1.2 1.4-2.6 1.4-4.2C7.8 9.4 9.6 7 12 7s4.2 2.4 4.2 6.2c0 1.6.4 3 1.4 4.2z"/><path d="M4.6 17.4h14.8"/><path d="M10.2 20.4a2.1 2.1 0 0 0 3.6 0"/>'),
+    # —— 南昌 / 赣鄱专有 ——
+    ("i-train", '<rect x="5.4" y="4" width="13.2" height="12.4" rx="3"/><path d="M5.4 10.4h13.2"/><path d="M9 20l1.8-3.6M15 20l-1.8-3.6"/><path d="M8 16.4h.01M16 16.4h.01"/>'),
+    ("i-camera", '<rect x="3.4" y="7.6" width="17.2" height="12" rx="2.6"/><path d="M8.6 7.6 10 5.2h4l1.4 2.4"/><circle cx="12" cy="13.6" r="3.6"/>'),
+    ("i-umbrella", '<path d="M3.4 12.2a8.6 8.6 0 0 1 17.2 0z"/><path d="M12 12.2v6.4a2.4 2.4 0 0 1-4.8 0"/><path d="M12 3.6v1"/>'),
+    ("i-ticket", '<path d="M3.6 8.2V6.4h16.8v1.8a2.4 2.4 0 0 0 0 4.4v1.8H3.6v-1.8a2.4 2.4 0 0 0 0-4.4z"/><path d="M9 8.4v7.2" stroke-dasharray="2 2.4"/>'),
+    ("i-clock", '<circle cx="12" cy="12" r="8.4"/><path d="M12 7.6V12l3.2 2"/>'),
+    ("i-porcelain", '<path d="M8 3.6h8l-.6 3.2c2 1.2 3.2 3.4 3.2 6 0 4.2-3.2 7.6-6.6 7.6S5.4 17 5.4 12.8c0-2.6 1.2-4.8 3.2-6z"/><path d="M9.4 8.6c1.6 1 3.6 1 5.2 0"/><path d="M9.6 3.6c0-1.2 1-1.6 1.6-1.6"/>'),
+    ("i-pagoda", '<path d="M4.6 19.4h14.8"/><path d="M6.4 19.4V9.2h11.2v10.2"/><path d="M4 9.2h16L12 4z"/><path d="M9.6 19.4v-5.6h4.8v5.6"/><path d="M12 4V1.8"/>'),
+    ("i-fountain", '<path d="M3 20.4h18"/><path d="M12 20.4V12"/><path d="M12 12c0-3 2-5 4.4-5.6M12 12c0-3-2-5-4.4-5.6"/><path d="M12 12c0-2 .8-3.6 2-4.6M12 12c0-2-.8-3.6-2-4.6"/><path d="M6.6 6.4h.01M17.4 6.4h.01"/>'),
+]
+
+SPRITE = (
+    "<!-- shell:icons — 手绘 SVG 图标雪碧图，改图标请改 tools/build-shell.py 后重跑 -->\n"
+    '<svg class="ic-sprite" aria-hidden="true" focusable="false">\n'
+    + "".join('  <symbol id="%s" viewBox="0 0 24 24">%s</symbol>\n' % (n, d) for n, d in ICONS)
+    + "</svg>\n"
+    "<!-- /shell:icons -->"
+)
+
+CRITICAL = (
+    "<!-- shell:critical — 首帧即上主题底色，避免外部样式表到达前出现白闪 -->\n"
+    "<style>html{background:#FAF7F0}</style>"
+)
+
+# 搜索框排在最后：顶栏靠负 top 的 sticky 偏移吸顶（见 style.css），
+# 滚动时只有顶栏最下面那一段会留在屏幕里，所以「搜索」必须是视觉上的最后一行。
+SEARCH_BLOCK = """  <div class="search-wrap">
+    <svg class="ic search-ico" aria-hidden="true"><use href="#i-search"/></svg>
+    <input id="searchInput" type="search" placeholder="%s" autocomplete="off" aria-label="搜索目的地、美食、非遗">
+    <button class="search-clear" id="searchClear" hidden aria-label="清空搜索"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg></button>
+  </div>"""
+
+CHIPS_BLOCK = """
+  <div class="hot-chips" id="hotChips">%s
+  </div>"""
+
+
+def topbar_html(page: str) -> str:
+    # 顺序固定：定位行 → 热词 → 搜索框。热词本来在搜索框下面，但顶栏要靠
+    # "负 top 的 sticky 偏移"让搜索吸顶（只留最后一段在屏内），搜索必须是最后一行。
+    blocks = []
+    cls = "topbar"
+    if page in CHIP_PAGES:
+        cls += " has-chips"
+        blocks.append(CHIPS_BLOCK % "".join(
+            '\n    <a class="chip-link" href="%s" data-kw="%s">%s</a>' % (href, kw, label)
+            for kw, label, href in CHIPS
+        ))
+    if page in SEARCH_PAGES:
+        cls += " has-search"
+        blocks.append(SEARCH_BLOCK % PLACEHOLDER.get(page, PLACEHOLDER["home"]))
+    inner = "".join("\n" + b for b in blocks)
+    return (
+        "<!-- shell:topbar — 由 tools/build-shell.py 生成，改壳请改脚本后重跑 -->\n"
+        '<header class="%s">\n'
+        '  <div class="topbar-row">\n'
+        '    <button class="loc-btn" id="locBtn" aria-label="定位">\n'
+        '      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-5.5-7-11a7 7 0 1 1 14 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>\n'
+        '      <span id="locText">南昌 · 江西</span>\n'
+        '      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>\n'
+        '    </button>\n'
+        '    <span class="topbar-title">赣鄱四日 · 一江两岸</span>\n'
+        '  </div>%s\n'
+        '</header>\n'
+        '<!-- /shell:topbar -->' % (cls, inner)
+    )
+
+
+def tabbar_html(page: str) -> str:
+    items = []
+    active = TAB_ALIAS.get(page, page)
+    for pid, label, href, icon in NAV:
+        # aria-current 让读屏也能判断"我在哪一页"，光有 .active 的配色读屏读不出来
+        cls = "tab active" if pid == active else "tab"
+        aria = ' aria-current="page"' if pid == active else ""
+        items.append(
+            '  <a class="%s" href="%s" aria-label="%s"%s>\n'
+            '    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">%s</svg>\n'
+            '    <span>%s</span>\n'
+            '  </a>' % (cls, href, label, aria, icon, label)
+        )
+    return (
+        "<!-- shell:tabbar — 由 tools/build-shell.py 生成，改壳请改脚本后重跑 -->\n"
+        '<nav class="tabbar" aria-label="主导航">\n'
+        + "\n".join(items) + "\n"
+        "</nav>\n"
+        "<!-- /shell:tabbar -->"
+    )
+
+
+def block_re(name: str) -> re.Pattern:
+    return re.compile(
+        r"<!-- shell:%s\b[^>]*-->.*?<!-- /shell:%s -->" % (name, name), re.S
+    )
+
+
+def sync(path: str, write: bool) -> list[str]:
+    src = open(path, encoding="utf-8").read()
+    page = (re.search(r'<body[^>]*data-page="([a-z]+)"', src) or [None, None])[1]
+    if not page:
+        return ["%s：找不到 data-page，跳过" % os.path.basename(path)]
+    out = src
+    notes = []
+
+    # 1) head 里的首帧底色
+    if not re.search(r"<!-- shell:critical\b", out):
+        m = re.search(r'^<link rel="preload" as="font".*$', out, re.M)
+        if m:
+            out = out[:m.start()] + CRITICAL + "\n" + out[m.start():]
+        else:
+            out = out.replace("</head>", CRITICAL + "\n</head>", 1)
+        notes.append("插入首帧底色")
+
+    # 2) 图标雪碧图 + 顶栏 + 底部 Tab（整块插入，顺序固定：雪碧图 → 顶栏 → Tab）
+    shell = SPRITE + "\n\n" + topbar_html(page) + "\n\n" + tabbar_html(page)
+    stripped = out
+    for name in ("icons", "topbar", "tabbar"):
+        stripped = block_re(name).sub("", stripped)
+    stripped = re.sub(r"\n{3,}", "\n\n", stripped)
+    bm = re.search(r"<body[^>]*>\n", stripped)
+    if not bm:
+        return notes + ["%s：找不到 <body>，跳过" % os.path.basename(path)]
+    out = stripped[:bm.end()] + shell + "\n\n" + stripped[bm.end():]
+
+    if out == src:
+        return []          # 已同步，无需改动
+    notes.append("更新 shell 块")
+    if write:
+        # 临时文件 + 原子替换：预览层会抢占 HTML，原地写常失败
+        tmp = path + ".tmp"
+        with open(tmp, "w", encoding="utf-8") as fh:
+            fh.write(out)
+        os.replace(tmp, path)
+    else:
+        notes.append("需要写入")
+    return notes
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--check", action="store_true", help="只检查，不写文件")
+    ap.add_argument("--site-root", default=ROOT)
+    args = ap.parse_args()
+
+    pages = sorted(glob.glob(os.path.join(args.site_root, "*.html")))
+    if not pages:
+        print("没有找到 HTML 文件", file=sys.stderr)
+        return 1
+    changed = 0
+    for p in pages:
+        notes = sync(p, write=not args.check)
+        name = os.path.basename(p)
+        if notes:
+            changed += 1
+            print("%-14s %s" % (name, "，".join(notes)))
+        else:
+            print("%-14s 已是同步状态" % name)
+    print()
+    if args.check and changed:
+        print("✗ 有 %d 个页面未同步" % changed)
+        return 1
+    if args.check:
+        print("✅ %d 个页面均已同步" % len(pages))
+    else:
+        print("✅ 已处理 %d 个页面（%d 个有改动）" % (len(pages), changed))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

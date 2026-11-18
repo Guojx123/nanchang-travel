@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#16324F">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="description" content="南昌打卡地图：滕王阁、万寿宫、八一广场、绳金塔、秋水广场机位，附拍照姿势、穿搭建议、避坑清单，以及景德镇与龙南周边。">
+<title>打卡 | 赣鄱四日 · 龙南 南昌 景德镇</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon-192.png">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<!-- shell:critical — 首帧即上主题底色，避免外部样式表到达前出现白闪 -->
+<style>html{background:#FAF7F0}</style>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/noto-serif-sc-subset.woff2" crossorigin>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="explore">
+<!-- shell:icons — 手绘 SVG 图标雪碧图，改图标请改 tools/build-shell.py 后重跑 -->
+<svg class="ic-sprite" aria-hidden="true" focusable="false">
+  <symbol id="i-locate" viewBox="0 0 24 24"><path d="M12 21s-6.5-5.4-6.5-10.2A6.5 6.5 0 0 1 18.5 10.8C18.5 15.6 12 21 12 21z"/><circle cx="12" cy="10.6" r="2.4"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.8 4.8a5.4 5.4 0 0 0-7.6 0L12 6.1l-1.2-1.3a5.4 5.4 0 0 0-7.6 7.6l1.2 1.3L12 21l7.6-7.3 1.2-1.3a5.4 5.4 0 0 0 0-7.6z"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6.4 6.4 17.6 17.6M17.6 6.4 6.4 17.6"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.4"/><path d="m20 20-4.6-4.6"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9.5 5 6.5 7-6.5 7"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19.6V6.6"/><path d="m6.6 12.2 5.4-5.4 5.4 5.4"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.6 4.6 4.6L19 6.6"/></symbol>
+  <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9.6 18.4h4.8"/><path d="M10.6 20.8h2.8"/><path d="M12 3.4a5.8 5.8 0 0 1 3.5 10.5c-.7.5-1.1 1.3-1.1 2.1H9.6c0-.8-.4-1.6-1.1-2.1A5.8 5.8 0 0 1 12 3.4z"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3.8v10.2"/><path d="m8.2 10.4 3.8 3.8 3.8-3.8"/><path d="M4.6 18v1.6a2 2 0 0 0 2 2h10.8a2 2 0 0 0 2-2V18"/></symbol>
+  <symbol id="i-install" viewBox="0 0 24 24"><rect x="7" y="3.2" width="10" height="17.6" rx="2.2"/><path d="M10.6 6.4h2.8"/><path d="M12 9.6v5.4"/><path d="m10.1 12.4 1.9 2 1.9-2"/></symbol>
+  <symbol id="i-bag" viewBox="0 0 24 24"><rect x="4.2" y="8" width="15.6" height="12" rx="2.2"/><path d="M9 8V6.2a3 3 0 0 1 6 0V8"/><path d="M9 12.4v3.6M15 12.4v3.6"/></symbol>
+  <symbol id="i-map" viewBox="0 0 24 24"><path d="M9 4 3.5 6.5v13L9 17l6 2.5L21 17V4l-6 2.5z"/><path d="M9 4v13M15 6.5v13"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4.6 7h14.8"/><path d="M9.6 7V5.4A1.4 1.4 0 0 1 11 4h2a1.4 1.4 0 0 1 1.4 1.4V7"/><path d="M6.7 7l.8 12.1a2 2 0 0 0 2 1.9h5a2 2 0 0 0 2-1.9L17.3 7"/><path d="M10.4 11v6M13.6 11v6"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 6.6A2.6 2.6 0 0 1 6.6 4h10.8A2.6 2.6 0 0 1 20 6.6V14a2.6 2.6 0 0 1-2.6 2.6H9.4L4 20.4z"/><circle cx="9" cy="10.4" r=".9" fill="currentColor" stroke="none"/><circle cx="12" cy="10.4" r=".9" fill="currentColor" stroke="none"/><circle cx="15" cy="10.4" r=".9" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="4" y="5.4" width="16" height="14.2" rx="2.2"/><path d="M4 10h16M8.6 3.4v3.4M15.4 3.4v3.4"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9.4" cy="8.4" r="3.2"/><path d="M3.6 19.6c.8-3.4 3.2-5.2 5.8-5.2s5 1.8 5.8 5.2"/><path d="M16.2 5.6a3.2 3.2 0 0 1 0 6"/><path d="M17.4 14.8c2.2.6 3.6 2.4 4.2 4.8"/></symbol>
+  <symbol id="i-note" viewBox="0 0 24 24"><path d="M6 3.6h8.4L19 8.2v12.2H6z"/><path d="M14 3.6v4.8h4.8"/><path d="M9 12.8h6M9 16.2h4"/></symbol>
+  <symbol id="i-plane" viewBox="0 0 24 24"><path d="M21.4 3.2 2.8 10.4l6.6 2.4 2.4 6.6z"/><path d="M21.4 3.2 9.4 12.8"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="8" cy="7.6" r="2.9"/><path d="M8 2.8v1.5M3.1 7.6h1.5M11.4 7.6h1.5M4.5 4.1 3.6 3.2M11.5 4.1l.9-.9"/><path d="M17.6 18.6H9.4a3.3 3.3 0 0 1 .2-6.6 4.6 4.6 0 0 1 8.6.8 3.4 3.4 0 0 1-.6 5.8z"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><circle cx="11.4" cy="12.8" r="7"/><circle cx="9" cy="10.6" r="1.3"/><circle cx="13.6" cy="14.4" r="1"/><circle cx="11" cy="16.2" r=".7"/><path d="M19.4 3.4l.5 1.4 1.4.5-1.4.5-.5 1.4-.5-1.4-1.4-.5 1.4-.5z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-music" viewBox="0 0 24 24"><circle cx="7.6" cy="17.4" r="2.6"/><circle cx="16.4" cy="15.2" r="2.6"/><path d="M10.2 17.4V6.6l8.8-1.8v10.4"/></symbol>
+  <symbol id="i-bowl" viewBox="0 0 24 24"><path d="M3.8 11.6h16.4a8.2 8.2 0 0 1-16.4 0z"/><path d="M2.6 11.6h18.8"/><path d="M9.4 8.6c1.2-1.4 1.2-2.6 0-4M14.6 8.6c1.2-1.4 1.2-2.6 0-4"/></symbol>
+  <symbol id="i-noodle" viewBox="0 0 24 24"><path d="M4.4 12.2h15.2a7.6 7.6 0 0 1-15.2 0z"/><path d="M3.2 12.2h17.6"/><path d="M14.6 3.2 20.8 9.4M17.4 2.6 21.6 6.8"/><path d="M8.8 9.4c2.4-1.6 4.4 1.6 6.8 0"/></symbol>
+  <symbol id="i-rice" viewBox="0 0 24 24"><path d="M4 12.6h16a8 8 0 0 1-16 0z"/><path d="M2.8 12.6h18.4"/><path d="M6.8 12.6a5.2 5.2 0 0 1 10.4 0"/><circle cx="10.2" cy="9.6" r=".7" fill="currentColor" stroke="none"/><circle cx="13.6" cy="10" r=".7" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-fish" viewBox="0 0 24 24"><path d="M15 12c-2.4-3.8-5-5.4-7.6-5.4C4.6 6.6 3 9.2 3 12s1.6 5.4 4.4 5.4c2.6 0 5.2-1.6 7.6-5.4z"/><path d="M15 7.4 20.4 12 15 16.6z"/><circle cx="6.6" cy="10.8" r=".8" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-meat" viewBox="0 0 24 24"><path d="M5.2 8.2c3.6-3 8.6-3.4 12.2-.8 3 2.2 3.4 6 .8 8.8-2.6 2.8-7.4 3.6-11 1.6-3.6-2-4.6-6.8-2-9.6z"/><path d="M8 10.8c2.8-1.4 5.8-.8 7.6 1.6"/></symbol>
+  <symbol id="i-chili" viewBox="0 0 24 24"><path d="M8 19.4c-3-3.8-2.2-9 1.8-11.2 2.6-1.4 5.2-.4 5.8 1.6-3.6 1-5.6 4.2-4.6 7.6.4 1.4-.6 2.6-3 2z"/><path d="M13.4 6.4c1.2-1.6 2.8-1.8 4.2-1-.4 1.4-1.4 2.4-2.8 2.6"/></symbol>
+  <symbol id="i-fire" viewBox="0 0 24 24"><path d="M12 20.8c3.3 0 5.8-2.3 5.8-5.4 0-5.6-5.8-6.6-5.8-11.4 0 0-6.2 3.2-6.2 9.6 0 4 3 7.2 6.2 7.2z"/><path d="M12 20.8c1.7 0 3-1.2 3-2.9 0-2.4-2.4-3.4-2.4-5.9 0 0-3 1.7-3 4.7 0 2.3 1.1 4.1 2.4 4.1z"/></symbol>
+  <symbol id="i-drumstick" viewBox="0 0 24 24"><path d="M18.4 5.2c1 2.6-.4 5.4-3 7-2.4 1.4-5.2 1.6-7.4.6l2.2-2.2c1.8-1.8 2.4-4.4 1.4-6.4z"/><path d="M8.2 12.6 5.2 15.6"/><circle cx="4.4" cy="17" r="1.8"/><circle cx="7" cy="14.4" r="1.8"/></symbol>
+  <symbol id="i-dumpling" viewBox="0 0 24 24"><path d="M3.8 15.6c0-4 3.7-7.2 8.2-7.2s8.2 3.2 8.2 7.2z"/><path d="M3.8 15.6h16.4"/><path d="M7.2 10.8c-.6 1.4-1 3-1 4.8M12 8.8v6.8M16.8 10.8c.6 1.4 1 3 1 4.8"/></symbol>
+  <symbol id="i-tofu" viewBox="0 0 24 24"><rect x="4.4" y="6.8" width="15.2" height="11" rx="2"/><path d="M4.4 11.4h15.2M9.8 6.8v11"/></symbol>
+  <symbol id="i-veg" viewBox="0 0 24 24"><path d="M6.6 17.8C4 15 4.6 9.6 9.4 6.8c4.8-2.8 10-1.2 11.4 3 1.4 4.4-2.2 9-7 9.8-2.8.4-5.6.2-7.2-1.8z"/><path d="M9.6 17.4C11.6 12.8 14.2 9.4 17.8 7.4"/></symbol>
+  <symbol id="i-skewer" viewBox="0 0 24 24"><path d="M9.2 21V4.2"/><circle cx="9.2" cy="7.6" r="2.5"/><circle cx="9.2" cy="12.6" r="2.5"/><circle cx="9.2" cy="17.6" r="2.5"/></symbol>
+  <symbol id="i-drink" viewBox="0 0 24 24"><path d="M6.6 6.6h10.8l-1.4 13a2 2 0 0 1-2 1.8h-4a2 2 0 0 1-2-1.8z"/><path d="M5.4 6.6h13.2"/><path d="M14.6 2.8 12.4 7"/><path d="M9.6 11.4h4.4v3.4H9.6z"/></symbol>
+  <symbol id="i-pig" viewBox="0 0 24 24"><circle cx="12" cy="12.6" r="6.8"/><path d="M6.6 8 5.2 4.4l3.8 1.6M17.4 8l1.4-3.6-3.8 1.6"/><ellipse cx="12" cy="14.2" rx="3.2" ry="2.2"/><circle cx="10.8" cy="14.2" r=".6" fill="currentColor" stroke="none"/><circle cx="13.2" cy="14.2" r=".6" fill="currentColor" stroke="none"/><circle cx="9.4" cy="10.8" r=".7" fill="currentColor" stroke="none"/><circle cx="14.6" cy="10.8" r=".7" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-hotel" viewBox="0 0 24 24"><path d="M3.4 20.4V7.6"/><path d="M3.4 14.4h17.2v6"/><path d="M8 11.6a2.4 2.4 0 0 1 2.4-2.4h5.6a2.4 2.4 0 0 1 2.4 2.4v2.8"/></symbol>
+  <symbol id="i-craft" viewBox="0 0 24 24"><path d="M12 3.6 20.4 12 12 20.4 3.6 12z"/><path d="M12 8.2 15.8 12 12 15.8 8.2 12z"/></symbol>
+  <symbol id="i-silver" viewBox="0 0 24 24"><path d="M4.6 5.6c0 6.4 3.3 10.6 7.4 12.8 4.1-2.2 7.4-6.4 7.4-12.8"/><path d="M4.6 5.6h14.8"/><circle cx="12" cy="19.4" r="1.5"/></symbol>
+  <symbol id="i-wine" viewBox="0 0 24 24"><path d="M7 6.8h10l-1.2 11.2a2.4 2.4 0 0 1-2.4 2.2h-2.8a2.4 2.4 0 0 1-2.4-2.2z"/><path d="M7 6.8c0-2 2.2-3.4 5-3.4s5 1.4 5 3.4"/><path d="M8.2 11.6h7.6"/></symbol>
+  <symbol id="i-stage" viewBox="0 0 24 24"><path d="M3.6 20.4V6.4M20.4 20.4V6.4"/><path d="M3.6 6.4h16.8"/><path d="M6 6.4c0 5.4 2 9.2 6 9.6 4-.4 6-4.2 6-9.6"/></symbol>
+  <symbol id="i-house" viewBox="0 0 24 24"><path d="M3.6 10.6 12 4.2l8.4 6.4"/><path d="M6.2 9.4v5.2h11.6V9.4"/><path d="M8.6 14.6v5.8M15.4 14.6v5.8"/><path d="M6.4 20.4h11.2"/></symbol>
+  <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4"/><path d="m15.2 8.8-2.2 5.6-5.6 2.2 2.2-5.6z"/></symbol>
+  <symbol id="i-card" viewBox="0 0 24 24"><rect x="3.4" y="5.4" width="17.2" height="13.2" rx="2.2"/><circle cx="8.8" cy="11" r="1.9"/><path d="M14.2 10.2h3.6M14.2 13.4h2.4"/><path d="M6.2 15.6c1.2-1 2.6-1.4 4-1.2"/></symbol>
+  <symbol id="i-plug" viewBox="0 0 24 24"><path d="M9 3.6v5M15 3.6v5"/><path d="M7 8.6h10v2.8a5 5 0 0 1-10 0z"/><path d="M12 16.4v4"/></symbol>
+  <symbol id="i-coat" viewBox="0 0 24 24"><path d="M9.2 3.8 5 6 3.6 10.8 6.2 12.4v8h11.6v-8l2.6-1.6-1.4-4.8-4.2-2.2"/><path d="M9.2 3.8c0 1.6 1.3 2.8 2.8 2.8s2.8-1.2 2.8-2.8"/></symbol>
+  <symbol id="i-bottle" viewBox="0 0 24 24"><rect x="8.4" y="8.8" width="7.2" height="11.6" rx="2"/><path d="M10.4 8.8V5.6h3.2v3.2"/><rect x="9.6" y="2.6" width="4.8" height="3" rx="1"/></symbol>
+  <symbol id="i-pill" viewBox="0 0 24 24"><g transform="rotate(-45 12 12)"><rect x="3.4" y="8.8" width="17.2" height="6.4" rx="3.2"/><path d="M12 8.8v6.4"/></g></symbol>
+  <symbol id="i-backpack" viewBox="0 0 24 24"><path d="M5.6 9.4a6.4 6.4 0 0 1 12.8 0v9.2a2.4 2.4 0 0 1-2.4 2.4H8a2.4 2.4 0 0 1-2.4-2.4z"/><path d="M9 9.4V6.8a3 3 0 0 1 6 0v2.6"/><path d="M9.6 13.2h4.8v3.6H9.6z"/></symbol>
+  <symbol id="i-ban" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4"/><path d="M6.4 17.6 17.6 6.4"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6.4 17.4c1-1.2 1.4-2.6 1.4-4.2C7.8 9.4 9.6 7 12 7s4.2 2.4 4.2 6.2c0 1.6.4 3 1.4 4.2z"/><path d="M4.6 17.4h14.8"/><path d="M10.2 20.4a2.1 2.1 0 0 0 3.6 0"/></symbol>
+  <symbol id="i-train" viewBox="0 0 24 24"><rect x="5.4" y="4" width="13.2" height="12.4" rx="3"/><path d="M5.4 10.4h13.2"/><path d="M9 20l1.8-3.6M15 20l-1.8-3.6"/><path d="M8 16.4h.01M16 16.4h.01"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><rect x="3.4" y="7.6" width="17.2" height="12" rx="2.6"/><path d="M8.6 7.6 10 5.2h4l1.4 2.4"/><circle cx="12" cy="13.6" r="3.6"/></symbol>
+  <symbol id="i-umbrella" viewBox="0 0 24 24"><path d="M3.4 12.2a8.6 8.6 0 0 1 17.2 0z"/><path d="M12 12.2v6.4a2.4 2.4 0 0 1-4.8 0"/><path d="M12 3.6v1"/></symbol>
+  <symbol id="i-ticket" viewBox="0 0 24 24"><path d="M3.6 8.2V6.4h16.8v1.8a2.4 2.4 0 0 0 0 4.4v1.8H3.6v-1.8a2.4 2.4 0 0 0 0-4.4z"/><path d="M9 8.4v7.2" stroke-dasharray="2 2.4"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4"/><path d="M12 7.6V12l3.2 2"/></symbol>
+  <symbol id="i-porcelain" viewBox="0 0 24 24"><path d="M8 3.6h8l-.6 3.2c2 1.2 3.2 3.4 3.2 6 0 4.2-3.2 7.6-6.6 7.6S5.4 17 5.4 12.8c0-2.6 1.2-4.8 3.2-6z"/><path d="M9.4 8.6c1.6 1 3.6 1 5.2 0"/><path d="M9.6 3.6c0-1.2 1-1.6 1.6-1.6"/></symbol>
+  <symbol id="i-pagoda" viewBox="0 0 24 24"><path d="M4.6 19.4h14.8"/><path d="M6.4 19.4V9.2h11.2v10.2"/><path d="M4 9.2h16L12 4z"/><path d="M9.6 19.4v-5.6h4.8v5.6"/><path d="M12 4V1.8"/></symbol>
+  <symbol id="i-fountain" viewBox="0 0 24 24"><path d="M3 20.4h18"/><path d="M12 20.4V12"/><path d="M12 12c0-3 2-5 4.4-5.6M12 12c0-3-2-5-4.4-5.6"/><path d="M12 12c0-2 .8-3.6 2-4.6M12 12c0-2-.8-3.6-2-4.6"/><path d="M6.6 6.4h.01M17.4 6.4h.01"/></symbol>
+</svg>
+<!-- /shell:icons -->
+
+<!-- shell:topbar — 由 tools/build-shell.py 生成，改壳请改脚本后重跑 -->
+<header class="topbar has-chips has-search">
+  <div class="topbar-row">
+    <button class="loc-btn" id="locBtn" aria-label="定位">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-5.5-7-11a7 7 0 1 1 14 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+      <span id="locText">南昌 · 江西</span>
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <span class="topbar-title">赣鄱四日 · 一江两岸</span>
+  </div>
+
+  <div class="hot-chips" id="hotChips">
+    <a class="chip-link" href="index.html?kw=滕王阁" data-kw="滕王阁">滕王阁</a>
+    <a class="chip-link" href="index.html?kw=万寿宫" data-kw="万寿宫">万寿宫</a>
+    <a class="chip-link" href="explore.html?kw=拌粉" data-kw="拌粉">拌粉瓦罐汤</a>
+    <a class="chip-link" href="explore.html?kw=景德镇" data-kw="景德镇">景德镇</a>
+  </div>
+  <div class="search-wrap">
+    <svg class="ic search-ico" aria-hidden="true"><use href="#i-search"/></svg>
+    <input id="searchInput" type="search" placeholder="搜索：滕王阁 / 万寿宫 / 拌粉 / 景德镇" autocomplete="off" aria-label="搜索目的地、美食、非遗">
+    <button class="search-clear" id="searchClear" hidden aria-label="清空搜索"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg></button>
+  </div>
+</header>
+<!-- /shell:topbar -->
+
+<!-- shell:tabbar — 由 tools/build-shell.py 生成，改壳请改脚本后重跑 -->
+<nav class="tabbar" aria-label="主导航">
+  <a class="tab" href="index.html" aria-label="首页">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+    <span>首页</span>
+  </a>
+  <a class="tab active" href="explore.html" aria-label="打卡" aria-current="page">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>
+    <span>打卡</span>
+  </a>
+  <a class="tab" href="trip.html" aria-label="行程">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v3M16 3v3"/><rect x="4" y="6" width="16" height="15" rx="2"/><path d="M4 11h16"/></svg>
+    <span>行程</span>
+  </a>
+  <a class="tab" href="pack.html" aria-label="打包">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="8" width="14" height="12" rx="2"/><path d="M9 8V6a3 3 0 0 1 6 0v2M9 12v4M15 12v4"/></svg>
+    <span>打包</span>
+  </a>
+  <a class="tab" href="me.html" aria-label="我的">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 5-5.5 8-5.5s6.5 1.5 8 5.5"/></svg>
+    <span>我的</span>
+  </a>
+</nav>
+<!-- /shell:tabbar -->
+
+
+<main id="app">
+<section class="view" data-view="explore">
+  <div class="sec-head"><h2>打卡地图</h2><span class="sec-sub">按类型找机位与景点</span></div>
+  <div class="explore-tabs" role="tablist">
+    <button class="active" data-cat="all">全部</button>
+    <button data-cat="photo">机位</button>
+    <button data-cat="spot">景点</button>
+    <button data-cat="food">美食</button>
+    <button data-cat="stay">住宿</button>
+    <button data-cat="nearby">周边</button>
+  </div>
+  <div class="explore-grid" id="exploreGrid">
+    <button class="ex-card" data-cat="photo" data-detail="p-tengwang-corridor"><b>滕王阁五层回廊</b><i>飞檐 + 赣江同框</i><p>下午四点侧逆光，24mm 贴栏杆，飞檐压 1/3。</p></button>
+    <button class="ex-card" data-cat="photo" data-detail="p-wanshou-lantern"><b>万寿宫灯笼巷</b><i>17:30 空镜 / 19:00 亮灯</i><p>青砖马头墙配暖红灯笼，35mm 竖构图最稳。</p></button>
+    <button class="ex-card" data-cat="photo" data-detail="p-bayi"><b>八一广场纪念塔</b><i>对称构图</i><p>广角贴地，塔尖留白；升旗约 6:40。</p></button>
+    <button class="ex-card" data-cat="photo" data-detail="p-shengjinta"><b>绳金塔</b><i>日落前 1 小时侧光</i><p>拍完塔直接进美食街，18:00 后开档。</p></button>
+    <button class="ex-card" data-cat="photo" data-detail="p-qiushui"><b>秋水广场蓝调</b><i>日落后 20 分钟</i><p>对岸红谷滩天际线，喷泉开不开都值得来。</p></button>
+    <button class="ex-card" data-cat="photo" data-detail="p-zhubao"><b>珠宝街扫街</b><i>7–9 点最有生活感</i><p>拌粉摊、卤味车、修表铺，拍南昌日常。</p></button>
+    <button class="ex-card" data-cat="photo" data-detail="p-ganjiang"><b>赣江芦苇</b><i>11 月芦花正白</i><p>逆光减 1 档，浅色衣服在芦苇里最出片。</p></button>
+    <button class="ex-card" data-cat="photo" data-detail="p-tw-times" data-keywords="时代广场 公寓楼 落霞 孤鹜 滕王阁"><b>时代广场公寓楼</b><i>滕王阁 P1 · 落霞与孤鹜</i><p>高处向西，阁楼、赣江与落日叠在一层。</p></button>
+    <button class="ex-card" data-cat="photo" data-detail="p-tw-xinzhou" data-keywords="新洲文化广场 停车场 框架构图 滕王阁"><b>新洲文化广场停车场</b><i>滕王阁 P2–3 · 框架构图</i><p>柱子或门洞做画框，把阁楼框在中间。</p></button>
+    <button class="ex-card" data-cat="photo" data-detail="p-tw-top" data-keywords="滕王阁 顶楼 豫章九号 日落"><b>滕王阁顶楼</b><i>P4 · 古今同框</i><p>日落时豫章九号与赣江同框。</p></button>
+    <button class="ex-card" data-cat="photo" data-detail="p-sjt-huitang" data-keywords="绳金塔 会堂侧路 巷子 烟火"><b>会堂侧路</b><i>绳金塔 P5 · 巷子尽头是塔</i><p>晾衣杆与电动车一路延伸到塔下。</p></button>
+    <button class="ex-card" data-cat="photo" data-detail="p-sjt-street" data-keywords="绳金塔 历史文化街区 人像"><b>绳金塔历史文化街区</b><i>P6 · 街区人像</i><p>青砖红灯笼，19:00 后拍人最稳。</p></button>
+    <button class="ex-card" data-cat="photo" data-detail="p-star-mixc" data-keywords="南昌之星 摩天轮 万象城 楼梯"><b>万象城 2 号门负一层</b><i>南昌之星 P7 · 电影感</i><p>楼梯几何框住摩天轮，蓝调对比最强。</p></button>
+    <button class="ex-card" data-cat="photo" data-detail="p-star-lawn" data-keywords="南昌之星 摩天轮 草坪 座椅"><b>万象城对面草坪座椅</b><i>P8 · 动漫感</i><p>人坐进去，轮盘在背后慢慢转。</p></button>
+    <button class="ex-card" data-cat="photo" data-detail="p-star-steps" data-keywords="南昌之星 摩天轮 服务中心 台阶"><b>摩天轮服务中心台阶</b><i>P9 · 故事感</i><p>台阶做引导线，坐一级回头看。</p></button>
+    <button class="ex-card" data-cat="photo" data-detail="p-wsg-inside" data-keywords="万寿宫 南昌字样 鲲茶 街区"><b>万寿宫街区字样墙</b><i>P11–12 · 南昌字样 / 鲲茶</i><p>多处「南昌」字样，买杯鲲茶当道具。</p></button>
+    <button class="ex-card" data-cat="photo" data-detail="p-chaoyang" data-keywords="朝阳江滩公园 日落 江滩"><b>朝阳江滩公园</b><i>P13–16 · 日落首选</i><p>江面开阔，出片不输汉江边。</p></button>
+    <button class="ex-card" data-cat="photo" data-detail="p-wushang" data-keywords="武商 七楼 空中花园 八一广场 南昌字样"><b>武商七楼空中花园</b><i>P17–18 · 蓝调</i><p>超大「南昌」字样 + 俯拍八一广场。</p></button>
+
+    <button class="ex-card" data-cat="spot" data-detail="p-tengwang"><b>滕王阁</b><i>东湖区 · 门票 50 元</i><p>江南三大名楼之首，背《滕王阁序》可免票。</p></button>
+    <button class="ex-card" data-cat="spot" data-detail="p-wanshou-wall"><b>万寿宫建筑群</b><i>免费 · 赣派街区</i><p>马头墙与砖雕门罩，阴天拍质感最好。</p></button>
+    <button class="ex-card" data-cat="spot" data-detail="p-provincial-museum"><b>江西省博物馆</b><i>免费预约 · 周一闭馆</i><p>海昏侯金器常设展，雨天首选替补。</p></button>
+    <button class="ex-card" data-cat="spot" data-detail="p-haihun"><b>海昏侯国遗址博物馆</b><i>新建区 · 往返约 5 小时</i><p>刘贺墓园与出土文物，需预约。</p></button>
+    <button class="ex-card" data-cat="spot" data-detail="p-anyi"><b>安义古村群</b><i>安义县 · 距市区 60km</i><p>三个赣派古村，青砖天井与千年樟树。</p></button>
+
+    <button class="ex-card" data-cat="food" data-detail="f-bancen"><b>南昌拌粉</b><i>¥6–10 · 早点</i><p>加一罐瓦罐汤才是完整套餐。</p></button>
+    <button class="ex-card" data-cat="food" data-detail="f-shengjinta-street"><b>绳金塔美食街</b><i>¥30–50/人 · 夜宵</i><p>烧烤、炒粉、瓦罐汤，本地人比游客多。</p></button>
+    <button class="ex-card" data-cat="food" data-detail="f-jdz-lengfen"><b>景德镇冷粉</b><i>¥8–12 · 瓷都早点</i><p>橘子皮是灵魂，微辣也会辣。</p></button>
+    <button class="ex-card" data-cat="food" data-detail="f-jdz-youtiao"><b>油条包麻糍</b><i>¥6–8 · 街头</i><p>咸甜脆糯，拍完赶紧吃。</p></button>
+    <button class="ex-card" data-cat="food" data-detail="f-dapinghuo" data-keywords="打平伙 鲜辣小炒 赣菜"><b>打平伙 · 鲜辣小炒</b><i>¥60–90/人 · 口碑</i><p>现炒鲜辣小炒，3 人 4 个菜足够。</p></button>
+    <button class="ex-card" data-cat="food" data-detail="f-lili" data-keywords="丽丽 水煮 辣汤 串"><b>丽丽水煮</b><i>景德镇抚州弄 · ¥20–30</i><p>水煮老摊，空心粉记得加豆冲。</p></button>
+    <button class="ex-card" data-cat="food" data-detail="f-jdz-taojie" data-keywords="陶姐 冷粉 景德镇"><b>陶姐冷粉</b><i>¥8–12 · 冷粉口碑店</i><p>橘子皮、萝卜干、辣椒，早上 9 点后常卖完。</p></button>
+    <button class="ex-card" data-cat="food" data-detail="f-jdz-chengxin" data-keywords="诚信 油条 麻糍 景德镇"><b>诚信油条店</b><i>¥6–10 · 油条老店</i><p>现炸油条裹麻糍，本地人从小吃到大。</p></button>
+    <button class="ex-card" data-cat="food" data-detail="f-jdz-yipin" data-keywords="一品 砂钵 景德镇 硬菜"><b>一品砂钵</b><i>¥30 上下 · 麻辣烫 + 油炸</i><p>陶院小吃街，炸香蕉和炸鸡柳必点。</p></button>
+    <button class="ex-card" data-cat="food" data-detail="f-awen" data-keywords="阿文 冰糖糕 甜点"><b>阿文老南昌冰糖糕</b><i>¥5–10 · 传统甜点</i><p>半透明米糕，凉着吃更 Q。</p></button>
+    <button class="ex-card" data-cat="food" data-detail="f-zhou" data-keywords="周大姐 油炸 串"><b>周大姐油炸</b><i>南昌西湖区池湾路 · ¥15–30</i><p>巷子里的老店，营业到 24:00。</p></button>
+    <a class="ex-card" data-cat="food" href="food.html" style="background:linear-gradient(120deg,#16324F,#4F6E63);color:#fff"><b>赣鄱美食大全 →</b><i>36 道 · 三城</i><p style="color:rgba(255,255,255,.8)">南昌拌粉瓦罐汤、景德镇冷粉、龙南客家菜全收录。</p></a>
+
+    <button class="ex-card" data-cat="stay" data-detail="s-huajian"><b>万寿宫花间阁 · 泊时</b><i>南昌 · 11.22–11.24</i><p>实际入住，步行滕王阁 15 分钟。</p></button>
+    <button class="ex-card" data-cat="stay" data-detail="s-longnan"><b>龙南住宿（待定）</b><i>龙南 · 11.21 一晚</i><p>选县城中心，次日到站 20 分钟内。</p></button>
+    <button class="ex-card" data-cat="stay" data-detail="s-jdz"><b>景德镇备案住宿</b><i>误末班备用</i><p>陶溪川一带，次日早班回南昌。</p></button>
+
+    <button class="ex-card" data-cat="nearby" data-detail="p-jdz-yuyao"><b>御窑厂 / 御窑博物馆</b><i>景德镇 · 红砖拱券</i><p>建筑本身就是机位，周一先查开放。</p></button>
+    <button class="ex-card" data-cat="nearby" data-detail="p-jdz-taoxichuan"><b>陶溪川</b><i>景德镇 · 本次不去市集</i><p>市集 19:00 出摊，但 19:25 发车，赶不上。</p></button>
+    <button class="ex-card" data-cat="nearby" data-detail="p-jdz-diaosu"><b>雕塑瓷厂</b><i>集市仅周六上午</i><p>11/23 是周一，别按攻略白跑。</p></button>
+    <button class="ex-card" data-cat="nearby" data-detail="p-jdz-museum"><b>中国陶瓷博物馆</b><i>免费预约 · 周一常闭</i><p>镇馆「无语菩萨」在二楼。</p></button>
+    <button class="ex-card" data-cat="nearby" data-detail="p-longnan-town"><b>龙南老城 · 濂江</b><i>龙南 · 本次安排</i><p>不赶景点，骑楼与江边慢走，17:40 吃客家菜。</p></button>
+    <button class="ex-card" data-cat="nearby" data-detail="p-longnan-yanyi"><b>燕翼围</b><i>龙南 · 杨村镇</i><p>更原始也更远，次日赶车别硬排。</p></button>
+    <button class="ex-card" data-cat="nearby" data-detail="p-jdz-diaosu-route" data-keywords="雕塑瓷厂 一方庭 迩边集 草尾 在野 么器 每盐所 拾芥 铁门咖啡"><b>雕塑瓷厂 9 站逛店</b><i>景德镇 · 步行约 4 小时</i><p>一方庭 → 在野 → 每盐所 → 铁门咖啡，顺序照走。</p></button>
+    <button class="ex-card" data-cat="nearby" data-detail="p-jdz-sanbao" data-keywords="三宝 三宝村 瓷谷 工作室 咖啡馆"><b>三宝国际瓷谷</b><i>景德镇 · 建议 2–3 小时</i><p>山谷里的工作室与咖啡馆，适合慢逛。</p></button>
+  </div>
+
+  <!-- 避坑 -->
+  <div class="sec-head"><h2>避坑提醒</h2><span class="sec-sub">行前必看</span></div>
+  <div class="alert-list">
+    <div class="alert-item"><svg class="ic" aria-hidden="true"><use href="#i-ban"/></svg><span><b>八一起义纪念馆 11/21 起闭馆</b>——整段行程都在闭馆期内，别排。改看八一广场纪念塔、新四军军部旧址。</span></div>
+    <div class="alert-item"><svg class="ic" aria-hidden="true"><use href="#i-ban"/></svg><span><b>江西省美术馆 11/18 起顶部造型遮蔽</b>——外立面不完整，专程拍建筑可跳过，改去省博物馆或南昌画院。</span></div>
+    <div class="alert-item"><svg class="ic" aria-hidden="true"><use href="#i-ban"/></svg><span><b>11/23 是周一，景德镇多数博物馆闭馆</b>——把重心放在陶溪川、雕塑瓷厂、三宝这类街区，出发前一天再查一次公众号。</span></div>
+    <div class="alert-item"><svg class="ic" aria-hidden="true"><use href="#i-ban"/></svg><span><b>秋水广场喷泉 11 月常缩场或检修</b>——别把它写成必看项，蓝调时刻的江景本身就够。</span></div>
+    <div class="alert-item"><svg class="ic" aria-hidden="true"><use href="#i-ban"/></svg><span><b>雕塑瓷厂创意集市只在周六上午</b>——11/23 周一没有集市，想淘货只能在陶溪川或工作室买。</span></div>
+    <div class="alert-item"><svg class="ic" aria-hidden="true"><use href="#i-ban"/></svg><span><b>陶溪川青年市集本次不去</b>——19:00 后才出摊，19:25 要从景德镇北发车，根本赶不上；11/23 周一本来也无摊。</span></div>
+    <div class="alert-item"><svg class="ic" aria-hidden="true"><use href="#i-ban"/></svg><span><b>关西新围本次不去</b>——Day 1 改成龙南老城与濂江，不用赶 35 公里；围屋留给下次。</span></div>
+    <div class="alert-item"><svg class="ic" aria-hidden="true"><use href="#i-bell"/></svg><span><b>三宝村很大，建议骑电动车</b>——部分哈啰车型不允许进村，租车时先问清，再检查电量与刹车。</span></div>
+  </div>
+
+  <!-- 18 个机位路线 -->
+  <div class="sec-head" id="spots"><h2>18 个机位</h2><span class="sec-sub">按楼栋找，照着走</span></div>
+  <div class="me-rows" style="margin-bottom:14px">
+    <a class="me-row ref-row" href="https://xhslink.cn/o/8b7fiWd4tf" target="_blank" rel="noopener noreferrer">
+      <span class="me-ic" aria-hidden="true"><svg class="ic"><use href="#i-note"/></svg></span>
+      <span><b>小红书原文 · 来南昌拍完这 18 个机位再离开</b><i>含 18 张实拍与机位说明 · 点击在浏览器打开</i></span>
+      <svg class="ic ic-go" aria-hidden="true"><use href="#i-chevron"/></svg>
+    </a>
+  </div>
+  <div class="guide-grid">
+    <div class="guide-card">
+      <h3><svg class="ic" aria-hidden="true"><use href="#i-pagoda"/></svg> 滕王阁 · P1–P4</h3>
+      <ul>
+        <li><b>P1 时代广场公寓楼</b>：高处向西，落霞、赣江、阁楼叠在一起；住宅楼先问保安</li>
+        <li><b>P2–3 新洲文化广场停车场</b>：柱子/门洞做框架，框住阁楼全貌</li>
+        <li><b>P4 滕王阁顶楼</b>：日落时豫章九号与赣江同框</li>
+      </ul>
+    </div>
+    <div class="guide-card">
+      <h3><svg class="ic" aria-hidden="true"><use href="#i-pagoda"/></svg> 绳金塔 · P5–P6</h3>
+      <ul>
+        <li><b>P5 会堂侧路</b>：烟火巷子尽头是塔，等一辆电动车再按</li>
+        <li><b>P6 历史文化街区</b>：青砖红灯笼，拍人有氛围</li>
+        <li>拍完直接进美食街，18:00 后开档</li>
+      </ul>
+    </div>
+    <div class="guide-card">
+      <h3><svg class="ic" aria-hidden="true"><use href="#i-fountain"/></svg> 南昌之星 · P7–P9</h3>
+      <ul>
+        <li><b>P7 万象城 2 号门负一层楼梯</b>：几何框架 + 摩天轮，电影感</li>
+        <li><b>P8 对面草坪座椅</b>：人坐进去，动漫感</li>
+        <li><b>P9 服务中心台阶</b>：台阶引导线，故事感</li>
+      </ul>
+    </div>
+    <div class="guide-card">
+      <h3><svg class="ic" aria-hidden="true"><use href="#i-house"/></svg> 万寿宫 · P11–P12</h3>
+      <ul>
+        <li>街区内多处「南昌」字样，别只挤入口那面</li>
+        <li>买一杯本地茶饮「鲲茶」当道具</li>
+        <li>夜里灯牌亮起比白天更出片</li>
+      </ul>
+    </div>
+    <div class="guide-card">
+      <h3><svg class="ic" aria-hidden="true"><use href="#i-sun"/></svg> 朝阳江滩 · P13–P16</h3>
+      <ul>
+        <li>只选一个日落点，就选这里</li>
+        <li>日落前 30 分钟到，蓝调再留 20 分钟</li>
+        <li>江风大，外套与擦镜布都带上</li>
+      </ul>
+    </div>
+    <div class="guide-card">
+      <h3><svg class="ic" aria-hidden="true"><use href="#i-camera"/></svg> 武商七楼 · P17–P18</h3>
+      <ul>
+        <li>超大「南昌」字样，一面墙就能拍</li>
+        <li>另一侧俯拍八一广场与江西省美术馆</li>
+        <li>亮灯后 15 分钟蓝调最浓</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 雕塑瓷厂逛店路线 -->
+  <div class="sec-head" id="diaosu"><h2>雕塑瓷厂逛店路线</h2><span class="sec-sub">9 站 · 步行约 4 小时</span></div>
+  <p class="pack-note">按这个顺序走很顺，路上还会顺路进一些小店；<b>集市只在周六上午</b>，周一门店照常、人少好逛。部分店可能临时休息，按门头判断。</p>
+  <ol class="shop-route">
+    <li><b>一方庭</b><i>从这里开始</i></li>
+    <li><b>迩边集</b><i>顺路第 2 站</i></li>
+    <li><b>草尾</b><i>顺路第 3 站</i></li>
+    <li><b>在野商店</b><i>顺路第 4 站</i></li>
+    <li><b>在野隔壁 · 日系女装</b><i>店名没记住，认门头；同行朋友在这买了衣服</i></li>
+    <li><b>么器</b><i>顺路第 6 站</i></li>
+    <li><b>每盐所</b><i>顺路第 7 站</i></li>
+    <li><b>拾芥</b><i>顺路第 8 站</i></li>
+    <li><b>铁门咖啡</b><i>收尾歇脚，别拖到赶车前</i></li>
+  </ol>
+
+  <!-- 出片指南 -->
+  <div class="sec-head" id="photoGuide"><h2>出片指南</h2><span class="sec-sub">光线 · 姿势 · 穿搭</span></div>
+  <div class="guide-grid">
+    <div class="guide-card">
+      <h3><svg class="ic" aria-hidden="true"><use href="#i-sun"/></svg> 光线与时间</h3>
+      <ul>
+        <li><b>16:00–17:00</b> 滕王阁侧逆光，飞檐有金边</li>
+        <li><b>17:20 日落</b>，11 月天黑快，蓝调只有 20 分钟</li>
+        <li><b>17:30</b> 万寿宫先拍空镜，19:00 亮灯再拍人</li>
+        <li>阴天别取消行程，砖雕与马头墙反而更好拍</li>
+      </ul>
+    </div>
+    <div class="guide-card">
+      <h3><svg class="ic" aria-hidden="true"><use href="#i-camera"/></svg> 姿势模板</h3>
+      <ul>
+        <li><b>走拍</b>：沿巷子走向镜头，第三步按快门，裙摆/大衣下摆会动</li>
+        <li><b>回头</b>：背对镜头走两步再回头，下巴略收，适合灯笼巷</li>
+        <li><b>倚栏</b>：滕王阁回廊手扶栏杆看江，别正对镜头</li>
+        <li><b>坐台阶</b>：八一广场台阶侧坐，一条腿伸直拉长比例</li>
+        <li><b>举相机</b>：在御窑拱券里举相机拍对方，画面有故事</li>
+      </ul>
+    </div>
+    <div class="guide-card">
+      <h3><svg class="ic" aria-hidden="true"><use href="#i-coat"/></svg> 穿搭建议</h3>
+      <ul>
+        <li>南昌 11 月 <b>8–17℃</b>，大衣 + 高领毛衣 + 长靴最稳</li>
+        <li>红墙/灯笼前穿<b>米白、驼色</b>，别穿正红会被吃掉</li>
+        <li>御窑红砖与陶溪川厂房适合<b>深蓝、墨绿</b></li>
+        <li>带一条<b>亮色围巾</b>，江风大又能当道具</li>
+        <li>鞋选防滑短靴，石板路和围屋台阶都不怕</li>
+      </ul>
+    </div>
+    <div class="guide-card">
+      <h3><svg class="ic" aria-hidden="true"><use href="#i-bulb"/></svg> 器材与后期</h3>
+      <ul>
+        <li>手机够用：<b>0.5×</b> 拍建筑，<b>2×</b> 拍人像压缩背景</li>
+        <li>夜景开<b>夜景模式</b>并靠着栏杆，别手持硬撑</li>
+        <li>拍灯笼降 <b>0.7–1 档曝光</b>，不然一片死白</li>
+        <li>后期把高光拉回、阴影提亮，暖色饱和度 +5 即可</li>
+        <li>带一块擦镜布，江边水汽很容易糊镜头</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 文化速读 -->
+  <div class="sec-head" id="culture"><h2>文化速读</h2><span class="sec-sub">赣鄱 · 瓷都 · 客家</span></div>
+  <div class="culture-hero">
+    <p class="cq-line">「落霞与孤鹜齐飞，秋水共长天一色」</p>
+    <p class="cq-sub">一句话把南昌的秋天写绝了。四天里会经过三种完全不同的地方气质：赣南围屋的宗族秩序、南昌的码头与英雄城、景德镇的窑火与手作。</p>
+  </div>
+  <div class="cul-list">
+    <article class="cul-card" data-detail="c-tengwang-order">
+      <h3><svg class="ic h-ico" aria-hidden="true"><use href="#i-note"/></svg> 滕王阁序 · 一篇文章捧红一座楼</h3>
+      <p>王勃路过洪州，在宴席上写下《滕王阁序》。此后一千多年，楼毁建二十余次，名字却一直没变。背全文免票，是南昌最文化的打卡方式。</p>
+    </article>
+    <article class="cul-card" data-detail="c-wanshou-culture">
+      <h3><svg class="ic h-ico" aria-hidden="true"><use href="#i-house"/></svg> 万寿宫 · 赣商的同乡网络</h3>
+      <p>万寿宫本是江西会馆，凡有赣商聚居的城市几乎都有一座。今天南昌的街区复建了道观、戏台与老字号，晚上比白天更像「老南昌」。</p>
+    </article>
+    <article class="cul-card" data-detail="c-bayi">
+      <h3><svg class="ic h-ico" aria-hidden="true"><use href="#i-stage"/></svg> 八一 · 英雄城的由来</h3>
+      <p>1927 年 8 月 1 日南昌起义，城市因此得名。纪念塔、旧址群、八一广场构成一条红色动线，这次纪念馆闭馆，就从广场与旧址看起。</p>
+    </article>
+    <article class="cul-card" data-detail="c-haihun">
+      <h3><svg class="ic h-ico" aria-hidden="true"><use href="#i-silver"/></svg> 海昏侯 · 十吨铜钱与 478 件金器</h3>
+      <p>刘贺只当了 27 天皇帝，墓里却埋着一个西汉的财富样本。金饼、马蹄金、孔子衣镜，真品在省博与遗址馆轮展。</p>
+    </article>
+    <article class="cul-card" data-detail="c-jdz-porcelain">
+      <h3><svg class="ic h-ico" aria-hidden="true"><use href="#i-craft"/></svg> 瓷都 · 土与火的千年</h3>
+      <p>宋代青白瓷、元代青花、明清御窑，景德镇把一门手艺做成了城市本身。逛御窑看制度，逛陶溪川看今天的手艺人。</p>
+    </article>
+    <article class="cul-card" data-detail="c-longnan-hakka">
+      <h3><svg class="ic h-ico" aria-hidden="true"><use href="#i-house"/></svg> 围屋 · 客家人的防御与体面</h3>
+      <p>高墙、厚门、天井、祠堂，一座围屋就是一个宗族。龙南现存 370 多座，关西新围是最完整的一座，至今仍有人住。</p>
+    </article>
+  </div>
+</section>
+</main>
+
+<script src="js/data.js" defer></script>
+<script src="js/layout.js" defer></script>
+<script src="js/app.js" defer></script>
+</body>
+</html>
