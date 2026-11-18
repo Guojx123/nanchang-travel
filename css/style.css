@@ -1255,6 +1255,9 @@ body { letter-spacing: 0; }                          /* 正文 16px 中文不加
   background: rgba(255,255,255,.94);
   border: 1px solid var(--hairline);
   box-shadow: var(--sh-1);
+  /* 变形修复：全局 button { min-height:44px } 会压过旧版 height:36px，
+     36×44 + border-radius:50% = 竖椭圆。改成 44×44 正圆，同时满足触控 ≥44px。 */
+  width: 44px; height: 44px; top: 8px; right: 8px;
 }
 .detail-close:active { background: var(--surface-2); transform: scale(.92); }
 .detail-body h2 { font-size: 24px; letter-spacing: .01em; font-weight: 600; color: var(--ink); }
